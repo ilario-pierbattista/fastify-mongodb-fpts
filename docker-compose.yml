@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  node:
+    image: node:18-alpine3.16
+    tty: true
+    volumes:
+      - '.:/app/node/'
+    user: 1000:1000
+    working_dir: /app/node/
+    ports:
+      - 127.0.0.123:80:3000
+    env_file: .env
+  mongo:
+    image: mongo:4.4
