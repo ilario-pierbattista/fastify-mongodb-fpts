@@ -4,16 +4,33 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev-server": "ts-node-dev --respawn --transpile-only ./src/index.ts",
+    "server": "node dist/index.js",
+    "test": "jest --maxWorkers=4",
+    "lint": "eslint . --ext .ts,.tsx",
+    "lint-fix": "eslint . --ext .ts,.tsx --fix",
+    "prettier": "prettier --check \"{src,test}/**/*.{ts,tsx}\"",
+    "prettier-fix": "prettier --write \"./{src,test}/**/*.ts\"",
+    "clean": "rm -rf dist",
+    "prebuild": "npm run clean",
+    "build": "tsc --p tsconfig.build.json"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/mongodb": "^4.0.7",
     "@types/node": "^17.0.41",
     "fastify": "^4.0.0",
     "fp-ts": "^2.12.1",
     "io-ts": "^2.2.16",
-    "mongo": "^0.1.0",
+    "mongodb": "^4.7.0",
+    "ts-node": "^10.8.1",
     "typescript": "^4.7.3"
+  },
+  "devDependencies": {
+    "eslint": "^8.17.0",
+    "eslint-config-facile": "^0.5.0",
+    "prettier": "^2.6.2",
+    "ts-node-dev": "^2.0.0"
   }
 }
