@@ -1,6 +1,6 @@
-import { fastify, FastifyInstance } from "fastify"
-import { pipe } from "fp-ts/lib/function"
+import { fastify, FastifyInstance } from 'fastify'
 import * as TE from 'fp-ts/TaskEither'
+import { pipe } from 'fp-ts/function'
 
 type ServerConfig = FastifyConfig
 
@@ -9,15 +9,13 @@ interface FastifyConfig {
 }
 
 export function configureServer(config: ServerConfig): TE.TaskEither<Error, FastifyInstance> {
-    const x = pipe(
+    return pipe(
         TE.of<Error, FastifyInstance>(fastify({ logger: config.logger })),
         TE.map(app => {
-
-            return app
+            return loadPlugins(app)
         }),
         TE.map(app => {
-
-            app.get('/', async (req, res) => {
+            app.get('/', async (_req, _res) => {
                 return {
                     data: 'hello world',
                 }
@@ -28,7 +26,6 @@ export function configureServer(config: ServerConfig): TE.TaskEither<Error, Fast
     )
 }
 
-function loadPlugin(fastifyInstance: FastifyInstance): FastifyInstance {
+function loadPlugins(fastifyInstance: FastifyInstance): FastifyInstance {
     return fastifyInstance // TODO here I need to register plugins
 }
-

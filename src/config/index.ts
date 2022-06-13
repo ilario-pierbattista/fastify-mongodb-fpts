@@ -5,7 +5,7 @@ import * as t from 'io-ts'
 import { PathReporter } from 'io-ts/lib/PathReporter'
 import type { MongoServiceConfig } from '../services/mongodb'
 
-const envType = t.type(
+const envType = t.strict(
     {
         MONGODB_URL: t.string,
         MONGODB_DATABASE: t.string,
@@ -32,6 +32,6 @@ export function decodeEnvironment(env: unknown): TE.TaskEither<Error, environmen
 export function buildMongoServiceConfig(env: environment): MongoServiceConfig {
     return {
         dabatase: env.MONGODB_DATABASE,
-        url: env.MONGODB_URL
+        url: env.MONGODB_URL,
     }
 }

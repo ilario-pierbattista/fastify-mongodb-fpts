@@ -1,20 +1,14 @@
-import { fastify, FastifyInstance } from 'fastify'
-import { pipe } from 'fp-ts/function'
+import type { FastifyInstance } from 'fastify'
 import * as TE from 'fp-ts/TaskEither'
+import { pipe } from 'fp-ts/function'
 import { decodeEnvironment } from './config'
+import { configureServer } from './server'
 
 pipe(
     decodeEnvironment(process.env),
     TE.chain((env): TE.TaskEither<Error, FastifyInstance> => {
-        const app: FastifyInstance = fastify({ logger: true })
-
-        app.get('/', async (req, res) => {
-            return {
-                data: 'hello world',
-            }
-        })
-
-        return TE.of<Error, FastifyInstance>(app)
+        console.log(env)
+        return configureServer({ logger: true })
     }),
     TE.chain((fastifyInstance): TE.TaskEither<Error, string> => {
         return start(fastifyInstance, {
@@ -36,7 +30,7 @@ function start(fastifyInstance: FastifyInstance, config: AppConfiguration): TE.T
     return pipe(
         TE.tryCatch(
             () => fastifyInstance.listen({ port: config.bindPort, host: config.bindAddress }),
-            (_) => new Error('Unable to start server')
+            _ => new Error('Unable to start server')
         ),
         TE.map(addr => {
             console.log(`Listening on ${addr}`)
